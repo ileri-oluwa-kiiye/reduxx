@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit"
+import { configureStore } from "@reduxjs/toolkit"
 import { Provider } from 'react-redux';
-import productReducer, { productsFetch } from './features/productSlice';
-import { productApi } from './features/productsApi';
+import productReducer, { productsFetch } from './features/productsSlice';
+import { productsApi } from './features/productsApi';
 
 const store = configureStore({
   reducer:{
     products: productReducer,
-    [productApi.reducerPath] : productApi.reducer
+    [productsApi.reducerPath] : productsApi.reducer
   },
-  middleware: (getDefaultMiddleware) =>{
-    getDefaultMiddleware().concat(productApi.middleware)
+  middleware: ( getDefaultMiddleware ) =>{
+    getDefaultMiddleware().concat(productsApi.middleware)
   }
 })
 
