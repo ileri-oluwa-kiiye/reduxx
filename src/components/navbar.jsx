@@ -1,15 +1,20 @@
 import cart_image from "../img/cart.png"
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     return (
         <NavigationDiv>
             <Nav>
-                <H2>Online Store</H2>
+                <Link to="/" style={{color: "inherit", textDecoration:"none"}}>
+                    <H2>Online Store</H2>
+                </Link>
+                <Link to="/cart" style={{color: "inherit", textDecoration:"none"}}>
                 <div>
                     <Img src={cart_image} alt="Cart" />
-                    <span>4</span>
+                    <span></span>
                 </div>
+                </Link>
             </Nav>
         </NavigationDiv>
     );

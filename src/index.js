@@ -1,24 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import { configureStore } from "@reduxjs/toolkit"
-import { Provider } from 'react-redux';
-import productReducer, { productsFetch } from './features/productsSlice';
+import React from "react";
+import App from "./App";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
 import { productsApi } from './features/productsApi';
+import { fetchProductsByIds } from './features/productsSlice';
+import productsReducer from './features/productsSlice';
+import { createRoot } from 'react-dom/client'; // Import createRoot from react-dom
+import cartReducer from "./features/cartSlice";
 
 const store = configureStore({
-  reducer:{
-    products: productReducer,
-    [productsApi.reducerPath] : productsApi.reducer
+  reducer: {
+    products: productsReducer,
+    cart: cartReducer,
+    [productsApi.reducerPath]: productsApi.reducer,
   },
-  middleware: ( getDefaultMiddleware ) =>{
-    return getDefaultMiddleware().concat(productsApi.middleware)
-  }
-})
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(productsApi.middleware),
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
-store.dispatch(productsFetch())
+store.dispatch(fetchProductsByIds());
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root')); // Use createRoot
 root.render(
   <React.StrictMode>
     <Provider store={store}>

@@ -1,41 +1,45 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 
-const initialState = {
-  items: [],
-  status: null,
-};
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-export const productsFetch = createAsyncThunk(
-  "products/productsFetch",
-  async () => {
-    try {
-      const response = await axios.get(
-        "https://chaoo-online-shop.herokuapp.com/products"
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error.message); 
-    }
+export const fetchProductsByIds = createAsyncThunk('products/fetchProductsByIds', async (productIds) => {
+  try {
+    const requests = productIds.map(productId => (
+      // eslint-disable-next-line 
+      console.log(`https://fakestoreapi.com/products/${productId}`),
+      axios.get(`https://fakestoreapi.com/products/${productId}`)));
+    const responses = await Promise.all(requests);
+    const products = responses.map(response => response.data);
+    return products;
+  } catch (error) {
+    throw error;
   }
-);
+});
 
-const productsSlice = createSlice({
-  name: "products",
-  initialState,
+// Create a slice
+const productSlice = createSlice({
+  name: 'product',
+  initialState: {
+    product: null,
+    status: 'idle',
+    error: null,
+  },
   reducers: {},
-  extraReducers: {
-    [productsFetch.pending]: (state, action) => {
-      state.status = "pending";
-    },
-    [productsFetch.fulfilled]: (state, action) => {
-      state.items = action.payload;
-      state.status = "success";
-    },
-    [productsFetch.rejected]: (state, action) => {
-      state.status = "rejected";
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProductsByIds.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchProductsByIds.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.product = action.payload;
+      })
+      .addCase(fetchProductsByIds.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
   },
 });
 
-export default productsSlice.reducer;
+export default productSlice.reducer;
+
