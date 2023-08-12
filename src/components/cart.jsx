@@ -98,11 +98,10 @@ const Cart = () => {
             </Button>
             <div className="cart-checkout">
               <div className="subtotal">
-                <span>Subtotal</span>
+                <h2>Subtotal</h2>
                 <Price className="amount">${cart.cartTotalAmount}</Price>
               </div>
-              <p>Taxes and shipping calculated at checkout</p>
-              <Button>Check out</Button>
+              <button>Check out</button>
               <div className="continue-shopping">
                 <Link to="/">
                   <svg
